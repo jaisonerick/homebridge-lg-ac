@@ -671,7 +671,7 @@ export class ACStatus {
    * detect fahrenheit unit device by timezone
    */
   public get isFahrenheitUnit() {
-    return this.device.data.timezoneCode.toLowerCase().startsWith('america/');
+    return this.device.data.timezoneCode.toLowerCase().startsWith('america/') && !this.device.data.timezoneCode.toLowerCase().endsWith('sao_paulo');
   }
 
   public convertTemperatureCelsiusFromHomekitToLG(temperatureInCelsius) {
