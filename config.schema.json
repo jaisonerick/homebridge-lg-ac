@@ -189,6 +189,10 @@
             "title": "Enable separate fan control",
             "type": "boolean"
           },
+          "ac_jetmode_control": {
+            "title": "Enable separate jetmode control",
+            "type": "boolean"
+          },
           "ac_buttons": {
             "title": "Customize AC buttons",
             "type": "array",
@@ -302,6 +306,7 @@
                 "devices[].ac_temperature_sensor",
                 "devices[].ac_humidity_sensor",
                 "devices[].ac_fan_control",
+                "devices[].ac_jetmode_control",
                 {
                   "key": "devices[].ac_buttons",
                   "title": "AC buttons",

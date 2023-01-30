@@ -105,11 +105,13 @@ export default class AirConditioner extends baseDevice {
     }
 
     // more feature
-    if (this.isJetModeEnabled(device)) {
+    if (this.isJetModeEnabled(device) && this.config.ac_jetmode_control as boolean) {
       this.serviceJetMode = accessory.getService('Jet Mode') || accessory.addService(Switch, 'Jet Mode', 'Jet Mode');
       this.serviceJetMode.updateCharacteristic(platform.Characteristic.Name, 'Jet Mode');
       this.serviceJetMode.getCharacteristic(platform.Characteristic.On)
         .onSet(this.setJetModeActive.bind(this));
+    } else if (this.serviceJetMode) {
+      accessory.removeService(this.serviceJetMode);
     }
 
     if (this.quietModeModels.includes(device.model)) {
