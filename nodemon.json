@@ -1,12 +1,12 @@
 {
-  "watch": [
-    "src"
-  ],
+  "watch": ["src"],
   "ext": "ts",
   "ignore": [],
-  "exec": "tsc && homebridge -I -D",
+  "exec": "tsc && homebridge -I -D -U ./.homebridge -P .",
   "signal": "SIGTERM",
+  "delay": 2500,
   "env": {
     "NODE_OPTIONS": "--trace-warnings"
   }
 }
+
