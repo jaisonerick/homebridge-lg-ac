@@ -3,6 +3,8 @@ dist
 
 .homebridge
 
+.tmp
+
 # ------------- Defaults ------------- #
 
 # Logs
