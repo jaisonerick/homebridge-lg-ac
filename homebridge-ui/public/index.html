@@ -313,7 +313,6 @@
     $('#usernameInput').val(configuration.username);
     $('#passwordInput').val(configuration.password);
     $('#refresh_token').val(configuration.refresh_token);
-    $('#thinq1').prop('checked', !!configuration.thinq1);
     $('#rememberUsername').prop('checked', configuration.username && configuration.password);
 
     $('#all-devices').prop('checked', !configuration.devices || !configuration.devices.length);
@@ -367,12 +366,6 @@
     option_selected.prop('selected', true);
 
     await init(configuration);
-
-    // button event
-    $('#thinq1').on('change', async function () {
-      configuration.thinq1 = $(this).prop('checked');
-      await homebridge.updatePluginConfig([configuration]);
-    });
 
     $('#country_language').on('change', async function () {
       const selected = $(this).find(':selected');

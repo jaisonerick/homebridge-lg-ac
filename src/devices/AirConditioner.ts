@@ -1,6 +1,6 @@
 import {baseDevice} from '../baseDevice';
 import {LGAcHomebridgePlatform} from '../platform';
-import {Characteristic, CharacteristicValue, PlatformAccessory} from 'homebridge';
+import {CharacteristicValue, PlatformAccessory} from 'homebridge';
 import {Device} from '../lib/Device';
 import {RangeValue} from '../lib/DeviceModel';
 import {cToF} from '../helper';

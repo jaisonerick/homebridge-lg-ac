@@ -5,7 +5,7 @@ import { Helper } from './helper';
 import {ThinQ} from './lib/ThinQ';
 import {EventEmitter} from 'events';
 import {PlatformType} from './lib/constants';
-import {ManualProcessNeeded, NotConnectedError} from './errors';
+import {NotConnectedError} from './errors';
 import {Device} from './lib/Device';
 
 /**
@@ -22,10 +22,6 @@ export class LGAcHomebridgePlatform implements DynamicPlatformPlugin {
 
   public readonly ThinQ: ThinQ;
   public readonly events: EventEmitter;
-  private readonly intervalTime;
-
-  // enable thinq1 support
-  private readonly enable_thinq1: boolean = false;
 
   constructor(
     public readonly log: Logger,
@@ -34,10 +30,8 @@ export class LGAcHomebridgePlatform implements DynamicPlatformPlugin {
   ) {
     this.events = new EventEmitter();
 
-    this.enable_thinq1 = config.thinq1 as boolean;
     this.config.devices = this.config.devices || [];
 
-    this.intervalTime = (config.refresh_interval || 5) * 1000;
     this.ThinQ = new ThinQ(this, config, log);
 
     if (!config.country || !config.language || !((config.username && config.password) || config.refresh_token)) {
@@ -104,7 +98,7 @@ export class LGAcHomebridgePlatform implements DynamicPlatformPlugin {
     }
 
     for (const device of devices) {
-      if (!this.enable_thinq1 && device.platform === PlatformType.ThinQ1) {
+      if (device.platform === PlatformType.ThinQ1) {
         this.log.debug('Thinq1 device is skipped: ', device.toString());
         continue;
       }
@@ -127,9 +121,6 @@ export class LGAcHomebridgePlatform implements DynamicPlatformPlugin {
       const accessoryType = Helper.make(device);
       if (accessoryType === null) {
         this.log.info('Device not supported: ' + device.toString());
-        this.ThinQ.unregister(device).then(() => {
-          this.log.debug(device.id, '- unregistered!');
-        });
         continue;
       }
 
@@ -213,33 +204,5 @@ export class LGAcHomebridgePlatform implements DynamicPlatformPlugin {
         }
       });
     }
-
-    if (this.accessories.length <= thinq2devices.length) {
-      return; // no thinq1 device, stop here
-    }
-
-    // polling thinq1 device
-    this.log.info('Start polling device data every '+ this.config.refresh_interval +' second.');
-    const ThinQ = this.ThinQ;
-    const interval = setInterval(async () => {
-      try {
-        for (const accessory of this.accessories) {
-          const device: Device = accessory.context.device;
-          if (device.platform === PlatformType.ThinQ1 && this.enable_thinq1) {
-            const deviceWithSnapshot = await ThinQ.pollMonitor(device);
-            if (deviceWithSnapshot.snapshot.raw !== null) {
-              this.events.emit(device.id, deviceWithSnapshot.snapshot);
-            }
-          }
-        }
-      } catch (err) {
-        if (err instanceof ManualProcessNeeded) {
-          this.log.info('Stop polling device data.');
-          this.log.warn(err.message);
-          clearInterval(interval);
-          return; // stop plugin here
-        }
-      }
-    }, this.intervalTime);
   }
 }

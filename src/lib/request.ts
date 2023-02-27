@@ -2,12 +2,10 @@ import axios, {AxiosInstance} from 'axios';
 import {
   ManualProcessNeeded,
   ManualProcessNeededErrorCode,
-  MonitorError,
   NotConnectedError,
   TokenExpiredErrorCode,
   TokenExpiredError,
-  NotConnectedErrorCodes,
-} from "../errors";
+} from '../errors';
 import axiosRetry from 'axios-retry';
 
 const client = axios.create();
@@ -26,22 +24,7 @@ axiosRetry(client, {
   },
   shouldResetTimeout: true, // reset timeout each retries
 });
-client.interceptors.response.use((response) => {
-  // thinq1 response
-  if (typeof response.data === 'object' && 'lgedmRoot' in response.data && 'returnCd' in response.data.lgedmRoot) {
-    const data = response.data.lgedmRoot;
-    const code = data.returnCd as string;
-    if (NotConnectedErrorCodes.includes(code)) {
-      throw new NotConnectedError(data.returnMsg || '');
-    } else if (code === TokenExpiredErrorCode) {
-      throw new TokenExpiredError(data.returnMsg);
-    } else if (code !== '0000') {
-      throw new MonitorError(code + ' - ' + data.returnMsg || '');
-    }
-  }
-
-  return response;
-}, (err) => {
+client.interceptors.response.use(undefined, (err) => {
   if (!err.response || err.response.data?.resultCode === '9999') {
     throw new NotConnectedError();
   } else if (err.response.data?.resultCode === TokenExpiredErrorCode) {

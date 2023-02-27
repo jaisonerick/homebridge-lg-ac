@@ -6,8 +6,7 @@ import {Gateway} from './Gateway';
 
 import {requestClient} from './request';
 import {Auth} from './Auth';
-import {WorkId} from './ThinQ';
-import {ManualProcessNeeded, MonitorError, NotConnectedError, TokenExpiredError} from '../errors';
+import {ManualProcessNeeded, NotConnectedError, TokenExpiredError} from '../errors';
 import crypto from 'crypto';
 import axios from 'axios';
 
@@ -20,7 +19,6 @@ export class API {
   protected _homes;
   protected _gateway: Gateway | undefined;
   protected session: Session = new Session('', '', 0);
-  protected jsessionId!: string;
   protected auth!: Auth;
   protected userNumber!: string;
 
@@ -49,10 +47,7 @@ export class API {
   }
 
   protected async request(method, uri: string, data?: any, headers?: any, retry = false) {
-    let requestHeaders = headers || this.defaultHeaders;
-    if (this._gateway?.thinq1_url && uri.startsWith(this._gateway.thinq1_url)) {
-      requestHeaders = headers || this.monitorHeaders;
-    }
+    const requestHeaders = headers || this.defaultHeaders;
 
     const url = resolveUrl(this._gateway?.thinq2_url, uri);
 
@@ -93,24 +88,6 @@ export class API {
         return {};
       }
     });
-  }
-
-  protected get monitorHeaders() {
-    const monitorHeaders = {
-      'Accept': 'application/json',
-      'x-thinq-application-key': 'wideq',
-      'x-thinq-security-key': 'nuts_securitykey',
-    };
-
-    if (typeof this.session?.accessToken === 'string') {
-      monitorHeaders['x-thinq-token'] = this.session?.accessToken;
-    }
-
-    if (this.jsessionId) {
-      monitorHeaders['x-thinq-jsessionId'] = this.jsessionId;
-    }
-
-    return monitorHeaders;
   }
 
   protected get defaultHeaders() {
@@ -190,37 +167,6 @@ export class API {
     });
   }
 
-  public async sendMonitorCommand(deviceId: string, cmdOpt: string, workId: WorkId) {
-    const data = {
-      cmd: 'Mon',
-      cmdOpt,
-      deviceId,
-      workId,
-    };
-
-    return await this.thinq1PostRequest('rti/rtiMon', data);
-  }
-
-  public async getMonitorResult(device_id, work_id) {
-    return await this.thinq1PostRequest('rti/rtiResult', {workList: [{deviceId: device_id, workId: work_id}]})
-      .then(data => {
-        if (!('workList' in data) || !('returnCode' in data.workList)) {
-          return null;
-        }
-
-        const workList = data.workList;
-        if (workList.returnCode !== '0000') {
-          throw new MonitorError(data);
-        }
-
-        if (!('returnData' in workList)) {
-          return null;
-        }
-
-        return Buffer.from(workList.returnData, 'base64');
-      });
-  }
-
   public setRefreshToken(refreshToken) {
     this.session = new Session('', refreshToken, 0);
   }
@@ -257,11 +203,6 @@ export class API {
       await this.refreshNewToken(this.session);
     }
 
-    if (!this.jsessionId) {
-      // get new jsessionid
-      this.jsessionId = await this.auth.getJSessionId(this.session.accessToken);
-    }
-
     if (!this.userNumber) {
       this.userNumber = await this.auth.getUserNumber(this.session?.accessToken);
     }
@@ -275,14 +216,5 @@ export class API {
   public async refreshNewToken(session: Session | null = null) {
     session = session || this.session;
     this.session = await this.auth.refreshNewToken(session);
-
-    this.jsessionId = await this.auth.getJSessionId(this.session.accessToken);
-  }
-
-  async thinq1PostRequest(endpoint: string, data: any) {
-    const headers = this.monitorHeaders;
-    return await this.postRequest(this._gateway?.thinq1_url + endpoint, {
-      lgedmRoot: data,
-    }, headers).then(data => data.lgedmRoot);
   }
 }

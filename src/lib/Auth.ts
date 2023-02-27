@@ -194,39 +194,6 @@ export class Auth {
     }
   }
 
-  public async getJSessionId(accessToken: string) {
-    // login to old gateway also - thinq v1
-    const memberLoginUrl = this.gateway.thinq1_url + 'member/login';
-    const memberLoginHeaders = {
-      'x-thinq-application-key': 'wideq',
-      'x-thinq-security-key': 'nuts_securitykey',
-      'Accept': 'application/json',
-      'x-thinq-token': accessToken,
-    };
-    const memberLoginData = {
-      countryCode: this.gateway.country_code,
-      langCode: this.gateway.language_code,
-      loginType: 'EMP',
-      token: accessToken,
-    };
-
-    return await requestClient.post(memberLoginUrl, {lgedmRoot: memberLoginData}, {
-      headers: memberLoginHeaders,
-    })
-      .then(res => res.data)
-      .then(data => data.lgedmRoot.jsessionId)
-      .catch(err => {
-        this.logger.debug(
-          err.message.startsWith(ManualProcessNeededErrorCode)
-            ? 'Please open the native LG App and sign in to your account to see what happened,'
-              +' maybe new agreement need your accept. Then try restarting Homebridge.'
-            : err.message,
-        );
-        this.logger.debug(err);
-        this.logger.info('Failed to login to old thinq v1 gateway. See debug logs for more details. Continuing anyways.');
-      });
-  }
-
   public async refreshNewToken(session: Session) {
     try {
       const gateway = await requestClient.post('https://kic.lgthinq.com:46030/api/common/gatewayUriList', {
