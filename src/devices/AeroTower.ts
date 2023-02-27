@@ -1,5 +1,5 @@
 import AirPurifier from './AirPurifier';
-import {LGThinQHomebridgePlatform} from '../platform';
+import {LGAcHomebridgePlatform} from '../platform';
 import {CharacteristicValue, PlatformAccessory} from 'homebridge';
 import {Device} from '../lib/Device';
 
@@ -17,7 +17,7 @@ export default class AeroTower extends AirPurifier {
   protected serviceUVNano;
 
   constructor(
-    protected readonly platform: LGThinQHomebridgePlatform,
+    protected readonly platform: LGAcHomebridgePlatform,
     protected readonly accessory: PlatformAccessory,
   ) {
     super(platform, accessory);

@@ -1,5 +1,5 @@
 import {baseDevice} from '../baseDevice';
-import {LGThinQHomebridgePlatform} from '../platform';
+import {LGAcHomebridgePlatform} from '../platform';
 import {PlatformAccessory} from 'homebridge';
 import {Device} from '../lib/Device';
 import {WasherDryerStatus} from './WasherDryer';
@@ -12,7 +12,7 @@ export default class Dishwasher extends baseDevice {
   protected serviceEventFinished;
 
   constructor(
-    protected readonly platform: LGThinQHomebridgePlatform,
+    protected readonly platform: LGAcHomebridgePlatform,
     protected readonly accessory: PlatformAccessory,
   ) {
     super(platform, accessory);

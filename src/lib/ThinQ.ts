@@ -1,6 +1,6 @@
 import {Logger, PlatformConfig} from 'homebridge';
 import {API} from './API';
-import {LGThinQHomebridgePlatform} from '../platform';
+import {LGAcHomebridgePlatform} from '../platform';
 import {Device} from './Device';
 import {PlatformType} from './constants';
 import * as uuid from 'uuid';
@@ -22,7 +22,7 @@ export class ThinQ {
   protected deviceModel: Record<string, DeviceModel> = {};
   protected persist;
   constructor(
-    public readonly platform: LGThinQHomebridgePlatform,
+    public readonly platform: LGAcHomebridgePlatform,
     public readonly config: PlatformConfig,
     public readonly log: Logger,
   ) {

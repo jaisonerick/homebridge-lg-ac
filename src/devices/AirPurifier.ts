@@ -1,4 +1,4 @@
-import {LGThinQHomebridgePlatform} from '../platform';
+import {LGAcHomebridgePlatform} from '../platform';
 import {CharacteristicValue, PlatformAccessory} from 'homebridge';
 import {Device} from '../lib/Device';
 import {baseDevice} from '../baseDevice';
@@ -19,7 +19,7 @@ export default class AirPurifier extends baseDevice {
   protected serviceAirFastMode;
 
   constructor(
-    protected readonly platform: LGThinQHomebridgePlatform,
+    protected readonly platform: LGAcHomebridgePlatform,
     protected readonly accessory: PlatformAccessory,
   ) {
     super(platform, accessory);

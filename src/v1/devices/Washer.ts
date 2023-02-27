@@ -1,11 +1,11 @@
 import {default as WasherV2} from '../../devices/WasherDryer';
-import {LGThinQHomebridgePlatform} from '../../platform';
+import {LGAcHomebridgePlatform} from '../../platform';
 import {CharacteristicValue, Perms, PlatformAccessory} from 'homebridge';
 import {Device} from '../../lib/Device';
 
 export default class Washer extends WasherV2 {
   constructor(
-    protected readonly platform: LGThinQHomebridgePlatform,
+    protected readonly platform: LGAcHomebridgePlatform,
     protected readonly accessory: PlatformAccessory,
   ) {
     super(platform, accessory);

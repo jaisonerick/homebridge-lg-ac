@@ -1,6 +1,6 @@
 import {baseDevice} from '../baseDevice';
-import {LGThinQHomebridgePlatform} from '../platform';
-import {CharacteristicValue, PlatformAccessory} from 'homebridge';
+import {LGAcHomebridgePlatform} from '../platform';
+import {Characteristic, CharacteristicValue, PlatformAccessory} from 'homebridge';
 import {Device} from '../lib/Device';
 import {RangeValue} from '../lib/DeviceModel';
 import {cToF} from '../helper';
@@ -42,7 +42,7 @@ export default class AirConditioner extends baseDevice {
   protected serviceLabelButtons;
 
   constructor(
-    protected readonly platform: LGThinQHomebridgePlatform,
+    protected readonly platform: LGAcHomebridgePlatform,
     protected readonly accessory: PlatformAccessory,
   ) {
     super(platform, accessory);
