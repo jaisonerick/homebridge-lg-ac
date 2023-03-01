@@ -13,10 +13,6 @@ export class Gateway {
     return this.data.thinq2Uri + '/';
   }
 
-  public get thinq1_url() {
-    return this.data.thinq1Uri + '/';
-  }
-
   public get country_code() {
     return this.data.countryCode;
   }
