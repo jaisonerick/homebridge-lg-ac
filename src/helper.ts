@@ -17,7 +17,10 @@ export class Helper {
     return null;
   }
 
-  public static category(_device: Device) {
+  public static category(device: Device) {
+    switch (device.type) {
+      case 'AC': return Categories.AIR_CONDITIONER;
+    }
     return Categories.OTHER;
   }
 }

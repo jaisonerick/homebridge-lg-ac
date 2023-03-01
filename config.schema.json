@@ -86,99 +86,21 @@
             "title": "Serial Number (optional)",
             "type": "string"
           },
-          "ac_air_quality": {
-            "title": "Enable Air Quality",
-            "description": "if your device supported Air Quality sensor",
-            "type": "boolean"
-          },
-          "ac_mode": {
-            "title": "AC Mode (Heating or Cooling or Both)",
-            "type": "string",
-            "oneOf": [
-              {
-                "title": "Both Heating and Cooling mode",
-                "enum": [
-                  "BOTH"
-                ]
-              },
-              {
-                "title": "Cooling mode only",
-                "enum": [
-                  "COOLING"
-                ]
-              },
-              {
-                "title": "Enable AUTO only",
-                "enum": [
-                  "AUTO"
-                ]
-              },
-              {
-                "title": "Heating mode only",
-                "enum": [
-                  "HEATING"
-                ]
-              }
-            ]
-          },
-          "ac_swing_mode": {
-            "title": "Swing Mode (vertical or horizontal)",
-            "type": "string",
-            "oneOf": [
-              {
-                "title": "Both vertical and horizontal swing",
-                "enum": [
-                  "BOTH"
-                ]
-              },
-              {
-                "title": "Vertical swing only",
-                "enum": [
-                  "VERTICAL"
-                ]
-              },
-              {
-                "title": "Horizontal swing only",
-                "enum": [
-                  "HORIZONTAL"
-                ]
-              }
-            ]
-          },
-          "ac_temperature_sensor": {
-            "title": "Current temperature as sensor",
-            "type": "boolean"
-          },
-          "ac_humidity_sensor": {
-            "title": "Enable humidity sensor",
+          "ac_fan_control": {
+            "title": "Enable FAN control",
             "type": "boolean"
           },
           "ac_led_control": {
             "title": "Enable led panel control",
             "type": "boolean"
           },
-          "ac_fan_control": {
-            "title": "Enable separate fan control",
-            "type": "boolean"
-          },
           "ac_jetmode_control": {
             "title": "Enable separate jetmode control",
             "type": "boolean"
           },
-          "ac_buttons": {
-            "title": "Customize AC buttons",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "op_mode": {
-                  "type": "integer"
-                }
-              }
-            }
+          "ac_comfort_sleep_control": {
+            "title": "Enable comfort sleep control",
+            "type": "boolean"
           }
         }
       }
@@ -227,25 +149,10 @@
               "expandable": true,
               "expanded": false,
               "items": [
-                "devices[].ac_air_quality",
-                "devices[].ac_mode",
-                "devices[].ac_swing_mode",
-                "devices[].ac_temperature_sensor",
-                "devices[].ac_humidity_sensor",
-                "devices[].ac_led_control",
                 "devices[].ac_fan_control",
+                "devices[].ac_led_control",
                 "devices[].ac_jetmode_control",
-                {
-                  "key": "devices[].ac_buttons",
-                  "title": "AC buttons",
-                  "description": "Configure AC buttons. For details check README.",
-                  "type": "array",
-                  "buttonText": "Add button",
-                  "items": [
-                    "devices[].ac_buttons[].name",
-                    "devices[].ac_buttons[].op_mode"
-                  ]
-                }
+                "devices[].ac_comfort_sleep_control"
               ],
               "condition": {
                 "functionBody": "return model.devices && model.devices[arrayIndices] && ['AC'].includes(model.devices[arrayIndices].type);"

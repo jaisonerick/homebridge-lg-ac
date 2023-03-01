@@ -3,7 +3,8 @@ import {DeviceModel} from './DeviceModel';
 
 export class Device {
   public deviceModel!: DeviceModel;
-  constructor(public data) {}
+
+  constructor(public data) { }
 
   public get id() {
     return this.data.deviceId;

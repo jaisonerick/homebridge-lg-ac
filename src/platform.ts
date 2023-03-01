@@ -179,7 +179,7 @@ export class LGAcHomebridgePlatform implements DynamicPlatformPlugin {
             }
           });
         });
-      }, 600000); // every 10 minute
+      }, 300000); // every 5 minute
 
       const refreshList = {};
 
@@ -190,7 +190,7 @@ export class LGAcHomebridgePlatform implements DynamicPlatformPlugin {
             this.events.emit(device.id, snapshot);
             refreshList[device.id].refresh();
           });
-        }, 300000);
+        }, 150000);
       });
 
       this.log.info('Start MQTT listener for thinq2 device');
